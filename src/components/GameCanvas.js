@@ -6,9 +6,9 @@ class GameCanvas extends Component {
     this.deadBalls = [];
   }
 
-  componentDidMount = () => {
-    this._initializeGameCanvas();
-  };
+  // componentDidMount = () => {
+  //   this._initializeGameCanvas();
+  // };
 
   _initializeGameCanvas = () => {
     // initialize canvas element and bind it to our React class

@@ -4,6 +4,17 @@ import GameCanvas from "./components/GameCanvas";
 import GameControls from "./components/GameControls";
 
 class GameInterface extends Component {
+  constructor() {
+    super();
+    this.state = {};
+    this.child = React.createRef();
+  }
+
+  onSubmit = event => {
+    event.preventDefault();
+    this.child.current._initializeGameCanvas();
+  };
+
   render() {
     return (
       <main
@@ -23,8 +34,11 @@ class GameInterface extends Component {
             alignItems: "center"
           }}
         >
-          <GameCanvas />
-          <GameControls />
+          <GameCanvas ref={this.child} />
+          <form>
+            <GameControls />
+            <input type="submit" value="Start Game" onClick={this.onSubmit} />
+          </form>
         </section>
       </main>
     );
