@@ -55,6 +55,13 @@ const GameControls = props => {
           onChange={props.onChange}
         />
       </label>
+      <label>
+        Ball Shape:
+        <select name="ballShape" onChange={props.onChange}>
+          <option value="square">Square</option>
+          <option value="circle">Circle</option>
+        </select>
+      </label>
     </article>
   );
 };

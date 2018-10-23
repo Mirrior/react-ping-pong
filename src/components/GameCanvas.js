@@ -156,13 +156,32 @@ class GameCanvas extends Component {
     this._drawBox(this.player1);
     this._drawBox(this.player2);
     this._drawBox(this.boardDivider);
-    this._drawBox(this.gameBall);
+    if (this.props.settings.ballShape === "circle") {
+      this._drawCircle(this.gameBall);
+    } else if (this.props.settings.ballShape === "square") {
+      this._drawBox(this.gameBall);
+    }
   };
 
   // take in game object and draw to canvas
   _drawBox = box => {
     this.ctx.fillStyle = box.color;
     this.ctx.fillRect(box.x, box.y, box.width, box.height);
+  };
+  _drawCircle = box => {
+    this.ctx.beginPath();
+    this.ctx.fillStyle = box.color;
+    this.ctx.ellipse(
+      box.x,
+      box.y,
+      box.width,
+      box.height,
+      (45 * Math.PI) / 180,
+      0,
+      2 * Math.PI
+    );
+    this.ctx.fill();
+    this.ctx.closePath();
   };
 
   // render player 1 score
