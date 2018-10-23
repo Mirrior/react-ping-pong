@@ -6,7 +6,12 @@ import GameControls from "./components/GameControls";
 class GameInterface extends Component {
   constructor() {
     super();
-    this.state = { winScore: 5 };
+    this.state = {
+      winScore: 5,
+      ballVelocityX: 1,
+      ballVelocityY: 1,
+      ballInitialVelocity: 1
+    };
     this.child = React.createRef();
   }
 
@@ -16,6 +21,19 @@ class GameInterface extends Component {
   };
 
   handleChange = event => {
+    if (event.target.name === "ballInitialVelocity") {
+      if (event.target.value > 1) {
+        this.setState({
+          ballVelocityX: Number(event.target.value > 3 ? 3 : event.target.value)
+        });
+        this.setState({
+          ballVelocityY: Number(event.target.value > 3 ? 3 : event.target.value)
+        });
+      } else {
+        this.setState({ ballVelocityX: 1 });
+        this.setState({ ballVelocityY: 1 });
+      }
+    }
     this.setState({ [event.target.name]: event.target.value });
   };
 

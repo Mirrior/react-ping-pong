@@ -57,8 +57,8 @@ class GameCanvas extends Component {
       width: 15,
       height: 15,
       color: "#FF0000",
-      velocityX: 1,
-      velocityY: 1
+      velocityX: Number(this.props.settings.ballVelocityX),
+      velocityY: Number(this.props.settings.ballVelocityY)
     });
 
     // start render loop
@@ -117,8 +117,8 @@ class GameCanvas extends Component {
         width: 15,
         height: 15,
         color: "#FF0000",
-        velocityX: 1,
-        velocityY: 1
+        velocityX: Number(this.props.settings.ballVelocityX),
+        velocityY: Number(this.props.settings.ballVelocityY)
       });
     } else if (
       this.gameBall.x + this.gameBall.velocityX >
@@ -132,8 +132,8 @@ class GameCanvas extends Component {
         width: 15,
         height: 15,
         color: "#FF0000",
-        velocityX: -1,
-        velocityY: 1
+        velocityX: -Number(this.props.settings.ballVelocityX),
+        velocityY: Number(this.props.settings.ballVelocityY)
       });
     } else {
       this.gameBall.x += this.gameBall.velocityX;
