@@ -139,6 +139,12 @@ class GameCanvas extends Component {
       this.gameBall.x += this.gameBall.velocityX;
       this.gameBall.y += this.gameBall.velocityY;
     }
+    if (
+      this.p1Score === Number(this.props.settings.winScore) ||
+      this.p2Score === Number(this.props.settings.winScore)
+    ) {
+      this._initializeGameCanvas();
+    }
     this._drawRender();
   };
 

@@ -6,13 +6,17 @@ import GameControls from "./components/GameControls";
 class GameInterface extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { winScore: 5 };
     this.child = React.createRef();
   }
 
   onSubmit = event => {
     event.preventDefault();
     this.child.current._initializeGameCanvas();
+  };
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   render() {
@@ -34,9 +38,9 @@ class GameInterface extends Component {
             alignItems: "center"
           }}
         >
-          <GameCanvas ref={this.child} />
+          <GameCanvas settings={this.state} ref={this.child} />
           <form>
-            <GameControls />
+            <GameControls settings={this.state} onChange={this.handleChange} />
             <input type="submit" value="Start Game" onClick={this.onSubmit} />
           </form>
         </section>
