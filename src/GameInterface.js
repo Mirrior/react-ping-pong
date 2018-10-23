@@ -12,7 +12,8 @@ class GameInterface extends Component {
       ballVelocityY: 1,
       ballInitialVelocity: 1,
       paddle1Color: "#FFF",
-      paddle2Color: "#FFF"
+      paddle2Color: "#FFF",
+      ballColor: "#F00"
     };
     this.child = React.createRef();
   }

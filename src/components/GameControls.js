@@ -45,6 +45,16 @@ const GameControls = props => {
           onChange={props.onChange}
         />
       </label>
+      <label>
+        Ball Color:
+        <input
+          type="color"
+          name="ballColor"
+          placeholder="Ball Color"
+          value={props.settings.ballColor}
+          onChange={props.onChange}
+        />
+      </label>
     </article>
   );
 };

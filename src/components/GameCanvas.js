@@ -56,7 +56,7 @@ class GameCanvas extends Component {
       y: this.canvas.height / 2,
       width: 15,
       height: 15,
-      color: "#FF0000",
+      color: this.props.settings.ballColor,
       velocityX: Number(this.props.settings.ballVelocityX),
       velocityY: Number(this.props.settings.ballVelocityY)
     });
@@ -116,7 +116,7 @@ class GameCanvas extends Component {
         y: this.canvas.height / 2,
         width: 15,
         height: 15,
-        color: "#FF0000",
+        color: this.props.settings.ballColor,
         velocityX: Number(this.props.settings.ballVelocityX),
         velocityY: Number(this.props.settings.ballVelocityY)
       });
@@ -131,7 +131,7 @@ class GameCanvas extends Component {
         y: this.canvas.height / 2,
         width: 15,
         height: 15,
-        color: "#FF0000",
+        color: this.props.settings.ballColor,
         velocityX: -Number(this.props.settings.ballVelocityX),
         velocityY: Number(this.props.settings.ballVelocityY)
       });
