@@ -25,6 +25,26 @@ const GameControls = props => {
           onChange={props.onChange}
         />
       </label>
+      <label>
+        Player 1 Color:
+        <input
+          type="color"
+          name="paddle1Color"
+          placeholder="Player 1 Color"
+          value={props.settings.paddle1Color}
+          onChange={props.onChange}
+        />
+      </label>
+      <label>
+        Player 2 Color:
+        <input
+          type="color"
+          name="paddle2Color"
+          placeholder="Player 2 Color"
+          value={props.settings.paddle2Color}
+          onChange={props.onChange}
+        />
+      </label>
     </article>
   );
 };
