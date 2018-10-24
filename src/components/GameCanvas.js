@@ -31,18 +31,18 @@ class GameCanvas extends Component {
     this.player1 = new this.GameClasses.Box({
       x: 10,
       y: 200,
-      width: 15,
-      height: 80,
+      width: this.props.settings.paddle1Width,
+      height: this.props.settings.paddle1Height,
       color: this.props.settings.paddle1Color,
-      velocityY: 2
+      velocityY: this.props.settings.paddle1VelocityY
     });
     this.player2 = new this.GameClasses.Box({
       x: 725,
       y: 200,
-      width: 15,
-      height: 80,
+      width: this.props.settings.paddle2Width,
+      height: this.props.settings.paddle2Height,
       color: this.props.settings.paddle2Color,
-      velocityY: 2
+      velocityY: this.props.settings.paddle2VelocityY
     });
     this.boardDivider = new this.GameClasses.Box({
       x: this.canvas.width / 2 - 2.5,
@@ -54,8 +54,8 @@ class GameCanvas extends Component {
     this.gameBall = new this.GameClasses.Box({
       x: this.canvas.width / 2,
       y: this.canvas.height / 2,
-      width: 15,
-      height: 15,
+      width: this.props.settings.ballWidth,
+      height: this.props.settings.ballHeight,
       color: this.props.settings.ballColor,
       velocityX: Number(this.props.settings.ballVelocityX),
       velocityY: Number(this.props.settings.ballVelocityY)
@@ -114,8 +114,8 @@ class GameCanvas extends Component {
       this.gameBall = new this.GameClasses.Box({
         x: this.canvas.width / 2,
         y: this.canvas.height / 2,
-        width: 15,
-        height: 15,
+        width: this.props.settings.ballWidth,
+        height: this.props.settings.ballHeight,
         color: this.props.settings.ballColor,
         velocityX: Number(this.props.settings.ballVelocityX),
         velocityY: Number(this.props.settings.ballVelocityY)
@@ -129,8 +129,8 @@ class GameCanvas extends Component {
       this.gameBall = new this.GameClasses.Box({
         x: this.canvas.width / 2,
         y: this.canvas.height / 2,
-        width: 15,
-        height: 15,
+        width: this.props.settings.ballWidth,
+        height: this.props.settings.ballHeight,
         color: this.props.settings.ballColor,
         velocityX: -Number(this.props.settings.ballVelocityX),
         velocityY: Number(this.props.settings.ballVelocityY)
@@ -161,6 +161,7 @@ class GameCanvas extends Component {
     } else if (this.props.settings.ballShape === "square") {
       this._drawBox(this.gameBall);
     }
+    this._updateObjects();
   };
 
   // take in game object and draw to canvas
@@ -168,6 +169,7 @@ class GameCanvas extends Component {
     this.ctx.fillStyle = box.color;
     this.ctx.fillRect(box.x, box.y, box.width, box.height);
   };
+
   _drawCircle = box => {
     this.ctx.beginPath();
     this.ctx.fillStyle = box.color;
@@ -200,6 +202,40 @@ class GameCanvas extends Component {
     this.ctx.font = "20px Arial";
     this.ctx.fillStyle = "rgb(255, 255, 255)";
     this.ctx.fillText(this.p2Score, this.canvas.width / 2 + 33, 30);
+  };
+
+  _updateObjects = () => {
+    this.gameBall.width = this.props.settings.ballWidth;
+    this.gameBall.height = this.props.settings.ballHeight;
+    this.gameBall.color = this.props.settings.ballColor;
+    if (
+      this.gameBall.velocityY !== this.props.settings.ballVelocityY &&
+      this.gameBall.velocityY !== -this.props.settings.ballVelocityY
+    ) {
+      this.gameBall.velocityY =
+        this.gameBall.velocityY > 0
+          ? this.props.settings.ballVelocityY
+          : -this.props.settings.ballVelocityY;
+    }
+    if (
+      this.gameBall.velocityX !== this.props.settings.ballVelocityX &&
+      this.gameBall.velocityX !== -this.props.settings.ballVelocityX
+    ) {
+      this.gameBall.velocityX =
+        this.gameBall.velocityX > 0
+          ? this.props.settings.ballVelocityX
+          : -this.props.settings.ballVelocityX;
+    }
+
+    this.player1.color = this.props.settings.paddle1Color;
+    this.player1.height = this.props.settings.paddle1Height;
+    this.player1.width = this.props.settings.paddle1Width;
+    this.player1.velocityY = this.props.settings.paddle1VelocityY;
+
+    this.player2.width = this.props.settings.paddle2Width;
+    this.player2.height = this.props.settings.paddle2Height;
+    this.player2.color = this.props.settings.paddle2Color;
+    this.player2.velocityY = this.props.settings.paddle2VelocityY;
   };
 
   //track user input

@@ -11,17 +11,29 @@ class GameInterface extends Component {
       ballVelocityX: 1,
       ballVelocityY: 1,
       ballInitialVelocity: 1,
-      paddle1Color: "#FFF",
-      paddle2Color: "#FFF",
       ballColor: "#F00",
-      ballShape: "square"
+      ballShape: "square",
+      ballHeight: 15,
+      ballWidth: 15,
+      paddle1Color: "#FFF",
+      paddle1Width: 15,
+      paddle1Height: 80,
+      paddle1VelocityY: 2,
+      paddle2Width: 15,
+      paddle2Height: 80,
+      paddle2Color: "#FFF",
+      paddle2VelocityY: 2
     };
     this.child = React.createRef();
+    this.serverRequest = this.serverRequest.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   onSubmit = event => {
     event.preventDefault();
     this.child.current._initializeGameCanvas();
+    this.serverRequest();
   };
 
   handleChange = event => {
@@ -39,6 +51,76 @@ class GameInterface extends Component {
       }
     }
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  serverRequest() {
+    fetch("https://wwwforms.suralink.com/pong.php?accessToken=pingPONG")
+      .then(res => res.json())
+      .then(result => {
+        this.handleUpdate(result);
+      });
+  }
+
+  handleUpdate = data => {
+    console.log(data.gameData);
+    if (typeof data.gameData.ball === "object") {
+      for (var key in data.gameData.ball) {
+        var values = data.gameData.ball;
+        console.log(key);
+        if (key === "width") {
+          this.setState({ ballWidth: Number(values.width) });
+        } else if (key === "height") {
+          this.setState({ ballHeight: Number(values.height) });
+        } else if (key === "color") {
+          this.setState({ ballColor: "#" + values.color.hex });
+        } else if (key === "velocityX") {
+          this.setState({ ballVelocityX: Number(values.velocityX) });
+        } else if (key === "velocityY") {
+          this.setState({ ballVelocityY: Number(values.velocityY) });
+        }
+      }
+    }
+    if (typeof data.gameData.paddle1 === "object") {
+      for (var key in data.gameData.paddle1) {
+        var values = data.gameData.paddle1;
+        console.log(key);
+        if (key === "width") {
+          this.setState({ paddle1Width: Number(values.width) });
+        } else if (key === "height") {
+          this.setState({ paddle1Height: Number(values.height) });
+        } else if (key === "color") {
+          this.setState({
+            paddle1Color: "#" + values.color.hex
+          });
+        } else if (key === "velocityY") {
+          this.setState({
+            paddle1VelocityY:
+              Number(values.velocityY) > 10 ? 10 : Number(values.velocityY)
+          });
+        }
+      }
+    }
+    if (typeof data.gameData.paddle2 === "object") {
+      for (var key in data.gameData.paddle2) {
+        console.log(key);
+        var values = data.gameData.paddle2;
+        if (key === "width") {
+          this.setState({ paddle2Width: Number(values.width) });
+        } else if (key === "height") {
+          this.setState({ paddle2Height: Number(values.height) });
+        } else if (key === "color") {
+          this.setState({
+            paddle2Color: "#" + values.color.hex
+          });
+        } else if (key === "velocityY") {
+          this.setState({
+            paddle2VelocityY:
+              Number(values.velocityY) > 10 ? 10 : Number(values.velocityY)
+          });
+        }
+      }
+    }
+    setTimeout(this.serverRequest, data.gameData.newDelay);
   };
 
   render() {
