@@ -23,3 +23,10 @@ Player 1(left paddle) Controls:
 Player 2(right paddle) Controls:
   * 'Arrow Up' - paddle up
   * 'Arrow Down' - paddle down
+
+Require Section Finished
+Bonus Sections
+  - Custom Game Ball Shape
+  - Out Of Bounds Reset
+  - Slider for Initial Ball Speed
+  - Slider for Paddle Movement
