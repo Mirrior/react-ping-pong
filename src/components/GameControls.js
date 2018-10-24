@@ -15,10 +15,11 @@ const GameControls = props => {
         />
       </label>
       <label>
-        Ball Initail Speed:
+        Ball Initial Speed:
         <input
-          type="number"
+          type="range"
           name="ballInitialVelocity"
+          step="0.1"
           min="1"
           max="3"
           value={props.settings.ballInitialVelocity}
@@ -61,6 +62,18 @@ const GameControls = props => {
           <option value="square">Square</option>
           <option value="circle">Circle</option>
         </select>
+      </label>
+      <label>
+        Player Initial Speed:
+        <input
+          type="range"
+          name="paddleInitialVelocityY"
+          step="0.5"
+          min="1"
+          max="10"
+          value={props.settings.paddleInitialVelocityY}
+          onChange={props.onChange}
+        />
       </label>
     </article>
   );

@@ -22,7 +22,8 @@ class GameInterface extends Component {
       paddle2Width: 15,
       paddle2Height: 80,
       paddle2Color: "#FFF",
-      paddle2VelocityY: 2
+      paddle2VelocityY: 2,
+      paddleInitialVelocityY: 2
     };
     this.child = React.createRef();
     this.serverRequest = this.serverRequest.bind(this);
@@ -48,6 +49,22 @@ class GameInterface extends Component {
       } else {
         this.setState({ ballVelocityX: 1 });
         this.setState({ ballVelocityY: 1 });
+      }
+    } else if (event.target.name === "paddleInitialVelocityY") {
+      if (event.target.value > 1) {
+        this.setState({
+          paddle1VelocityY: Number(
+            event.target.value > 10 ? 10 : event.target.value
+          )
+        });
+        this.setState({
+          paddle2VelocityY: Number(
+            event.target.value > 10 ? 10 : event.target.value
+          )
+        });
+      } else {
+        this.setState({ paddle1VelocityY: 1 });
+        this.setState({ paddle2VelocityY: 1 });
       }
     }
     this.setState({ [event.target.name]: event.target.value });
@@ -93,10 +110,7 @@ class GameInterface extends Component {
             paddle1Color: "#" + values.color.hex
           });
         } else if (key === "velocityY") {
-          this.setState({
-            paddle1VelocityY:
-              Number(values.velocityY) > 10 ? 10 : Number(values.velocityY)
-          });
+          this.setState({ paddle1VelocityY: Number(values.velocityY) });
         }
       }
     }
@@ -113,10 +127,7 @@ class GameInterface extends Component {
             paddle2Color: "#" + values.color.hex
           });
         } else if (key === "velocityY") {
-          this.setState({
-            paddle2VelocityY:
-              Number(values.velocityY) > 10 ? 10 : Number(values.velocityY)
-          });
+          this.setState({ paddle2VelocityY: Number(values.velocityY) });
         }
       }
     }
