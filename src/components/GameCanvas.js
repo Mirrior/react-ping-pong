@@ -120,6 +120,7 @@ class GameCanvas extends Component {
         velocityX: Number(this.props.settings.ballVelocityX),
         velocityY: Number(this.props.settings.ballVelocityY)
       });
+      this.props.outOfBounds();
     } else if (
       this.gameBall.x + this.gameBall.velocityX >
       this.player2.x + this.player2.width
@@ -135,6 +136,7 @@ class GameCanvas extends Component {
         velocityX: -Number(this.props.settings.ballVelocityX),
         velocityY: Number(this.props.settings.ballVelocityY)
       });
+      this.props.outOfBounds();
     } else {
       this.gameBall.x += this.gameBall.velocityX;
       this.gameBall.y += this.gameBall.velocityY;
@@ -204,38 +206,151 @@ class GameCanvas extends Component {
     this.ctx.fillText(this.p2Score, this.canvas.width / 2 + 33, 30);
   };
 
+  // updates game settings according to take in server changes
   _updateObjects = () => {
-    this.gameBall.width = this.props.settings.ballWidth;
-    this.gameBall.height = this.props.settings.ballHeight;
-    this.gameBall.color = this.props.settings.ballColor;
-    if (
-      this.gameBall.velocityY !== this.props.settings.ballVelocityY &&
-      this.gameBall.velocityY !== -this.props.settings.ballVelocityY
-    ) {
-      this.gameBall.velocityY =
-        this.gameBall.velocityY > 0
-          ? this.props.settings.ballVelocityY
-          : -this.props.settings.ballVelocityY;
-    }
-    if (
-      this.gameBall.velocityX !== this.props.settings.ballVelocityX &&
-      this.gameBall.velocityX !== -this.props.settings.ballVelocityX
-    ) {
-      this.gameBall.velocityX =
-        this.gameBall.velocityX > 0
-          ? this.props.settings.ballVelocityX
-          : -this.props.settings.ballVelocityX;
-    }
+    if (this.props.settings.serverRules) {
+      if (this.props.settings.tempBallWidth) {
+        this.gameBall.width = this.props.settings.tempBallWidth;
+      } else {
+        this.gameBall.width = this.props.settings.ballWidth;
+      }
 
-    this.player1.color = this.props.settings.paddle1Color;
-    this.player1.height = this.props.settings.paddle1Height;
-    this.player1.width = this.props.settings.paddle1Width;
-    this.player1.velocityY = this.props.settings.paddle1VelocityY;
+      if (this.props.settings.tempBallHeight) {
+        this.gameBall.height = this.props.settings.tempBallHeight;
+      } else {
+        this.gameBall.height = this.props.settings.ballHeight;
+      }
 
-    this.player2.width = this.props.settings.paddle2Width;
-    this.player2.height = this.props.settings.paddle2Height;
-    this.player2.color = this.props.settings.paddle2Color;
-    this.player2.velocityY = this.props.settings.paddle2VelocityY;
+      if (this.props.settings.tempBallColor) {
+        this.gameBall.color = this.props.settings.tempBallColor;
+      } else {
+        this.gameBall.color = this.props.settings.ballColor;
+      }
+
+      if (this.props.settings.tempBallVelocityY) {
+        if (
+          this.gameBall.velocityY !== this.props.settings.tempBallVelocityY &&
+          this.gameBall.velocityY !== -this.props.settings.tempBallVelocityY
+        ) {
+          this.gameBall.velocityY =
+            this.gameBall.velocityY > 0
+              ? this.props.settings.tempBallVelocityY
+              : -this.props.settings.tempBallVelocityY;
+        }
+      } else {
+        if (
+          this.gameBall.velocityY !== this.props.settings.ballVelocityY &&
+          this.gameBall.velocityY !== -this.props.settings.ballVelocityY
+        ) {
+          this.gameBall.velocityY =
+            this.gameBall.velocityY > 0
+              ? this.props.settings.ballVelocityY
+              : -this.props.settings.ballVelocityY;
+        }
+      }
+
+      if (this.props.settings.tempBallVelocityX) {
+        if (
+          this.gameBall.velocityX !== this.props.settings.tempBallVelocityX &&
+          this.gameBall.velocityX !== -this.props.settings.tempBallVelocityX
+        ) {
+          this.gameBall.velocityX =
+            this.gameBall.velocityX > 0
+              ? this.props.settings.tempBallVelocityX
+              : -this.props.settings.tempBallVelocityX;
+        }
+      } else {
+        if (
+          this.gameBall.velocityX !== this.props.settings.ballVelocityX &&
+          this.gameBall.velocityX !== -this.props.settings.ballVelocityX
+        ) {
+          this.gameBall.velocityX =
+            this.gameBall.velocityX > 0
+              ? this.props.settings.ballVelocityX
+              : -this.props.settings.ballVelocityX;
+        }
+      }
+
+      if (this.props.settings.tempPaddle1Color) {
+        this.player1.color = this.props.settings.tempPaddle1Color;
+      } else {
+        this.player1.color = this.props.settings.paddle1Color;
+      }
+
+      if (this.props.settings.tempPaddle1Height) {
+        this.player1.height = this.props.settings.tempPaddle1Height;
+      } else {
+        this.player1.height = this.props.settings.paddle1Height;
+      }
+
+      if (this.props.settings.tempPaddle1Width) {
+        this.player1.width = this.props.settings.tempPaddle1Width;
+      } else {
+        this.player1.width = this.props.settings.paddle1Width;
+      }
+
+      if (this.props.settings.tempPaddle1VelocityY) {
+        this.player1.velocityY = this.props.settings.tempPaddle1VelocityY;
+      } else {
+        this.player1.velocityY = this.props.settings.paddle1VelocityY;
+      }
+
+      if (this.props.settings.tempPaddle2Width) {
+        this.player2.width = this.props.settings.tempPaddle2Width;
+      } else {
+        this.player2.width = this.props.settings.paddle2Width;
+      }
+
+      if (this.props.settings.tempPaddle2Height) {
+        this.player2.height = this.props.settings.tempPaddle2Height;
+      } else {
+        this.player2.height = this.props.settings.paddle2Height;
+      }
+
+      if (this.props.settings.tempPaddle2Color) {
+        this.player2.color = this.props.settings.tempPaddle2Color;
+      } else {
+        this.player2.color = this.props.settings.paddle2Color;
+      }
+
+      if (this.props.settings.tempPaddle2VelocityY) {
+        this.player2.velocityY = this.props.settings.tempPaddle2VelocityY;
+      } else {
+        this.player2.velocityY = this.props.settings.paddle2VelocityY;
+      }
+    } else {
+      this.gameBall.width = this.props.settings.ballWidth;
+      this.gameBall.height = this.props.settings.ballHeight;
+      this.gameBall.color = this.props.settings.ballColor;
+      if (
+        this.gameBall.velocityY !== this.props.settings.ballVelocityY &&
+        this.gameBall.velocityY !== -this.props.settings.ballVelocityY
+      ) {
+        this.gameBall.velocityY =
+          this.gameBall.velocityY > 0
+            ? this.props.settings.ballVelocityY
+            : -this.props.settings.ballVelocityY;
+      }
+      if (
+        this.gameBall.velocityX !== this.props.settings.ballVelocityX &&
+        this.gameBall.velocityX !== -this.props.settings.ballVelocityX
+      ) {
+        this.gameBall.velocityX =
+          this.gameBall.velocityX > 0
+            ? this.props.settings.ballVelocityX
+            : -this.props.settings.ballVelocityX;
+      }
+
+      this.player1.color = this.props.settings.paddle1Color;
+      this.player1.height = this.props.settings.paddle1Height;
+      this.player1.width = this.props.settings.paddle1Width;
+      this.player1.velocityY = this.props.settings.paddle1VelocityY;
+
+      this.player2.width = this.props.settings.paddle2Width;
+      this.player2.height = this.props.settings.paddle2Height;
+      this.player2.color = this.props.settings.paddle2Color;
+      this.player2.velocityY = this.props.settings.paddle2VelocityY;
+    }
   };
 
   //track user input

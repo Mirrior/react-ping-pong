@@ -23,12 +23,28 @@ class GameInterface extends Component {
       paddle2Height: 80,
       paddle2Color: "#FFF",
       paddle2VelocityY: 2,
-      paddleInitialVelocityY: 2
+      paddleInitialVelocityY: 2,
+      serverRules: false,
+      tempBallVelocityX: null,
+      tempBallVelocityY: null,
+      tempBallColor: null,
+      tempBallHeight: null,
+      tempBallWidth: null,
+      tempPaddle1Color: null,
+      tempPaddle1Width: null,
+      tempPaddle1Height: null,
+      tempPaddle1VelocityY: null,
+      tempPaddle2Width: null,
+      tempPaddle2Height: null,
+      tempPaddle2Color: null,
+      tempPaddle2VelocityY: null
     };
+
     this.child = React.createRef();
     this.serverRequest = this.serverRequest.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.ballOutOfBounds = this.ballOutOfBounds.bind(this);
   }
 
   onSubmit = event => {
@@ -76,58 +92,72 @@ class GameInterface extends Component {
       .then(result => {
         this.handleUpdate(result);
       });
+    this.setState({ serverRules: true });
   }
 
+  ballOutOfBounds = () => {
+    this.setState({ serverRules: false });
+    this.setState({ tempBallVelocityX: null });
+    this.setState({ tempBallVelocityY: null });
+    this.setState({ tempBallColor: null });
+    this.setState({ tempBallHeight: null });
+    this.setState({ tempBallWidth: null });
+    this.setState({ tempPaddle1Color: null });
+    this.setState({ tempPaddle1Width: null });
+    this.setState({ tempPaddle1Height: null });
+    this.setState({ tempPaddle1VelocityY: null });
+    this.setState({ tempPaddle2Width: null });
+    this.setState({ tempPaddle2Height: null });
+    this.setState({ tempPaddle2Color: null });
+    this.setState({ tempPaddle2VelocityY: null });
+  };
+
   handleUpdate = data => {
-    console.log(data.gameData);
     if (typeof data.gameData.ball === "object") {
       for (var key in data.gameData.ball) {
         var values = data.gameData.ball;
-        console.log(key);
         if (key === "width") {
-          this.setState({ ballWidth: Number(values.width) });
+          this.setState({ tempBallWidth: Number(values.width) });
         } else if (key === "height") {
-          this.setState({ ballHeight: Number(values.height) });
+          this.setState({ tempBallHeight: Number(values.height) });
         } else if (key === "color") {
-          this.setState({ ballColor: "#" + values.color.hex });
+          this.setState({ tempBallColor: "#" + values.color.hex });
         } else if (key === "velocityX") {
-          this.setState({ ballVelocityX: Number(values.velocityX) });
+          this.setState({ tempBallVelocityX: Number(values.velocityX) });
         } else if (key === "velocityY") {
-          this.setState({ ballVelocityY: Number(values.velocityY) });
+          this.setState({ tempBallVelocityY: Number(values.velocityY) });
         }
       }
     }
     if (typeof data.gameData.paddle1 === "object") {
       for (var key in data.gameData.paddle1) {
         var values = data.gameData.paddle1;
-        console.log(key);
         if (key === "width") {
-          this.setState({ paddle1Width: Number(values.width) });
+          this.setState({ tempPaddle1Width: Number(values.width) });
         } else if (key === "height") {
-          this.setState({ paddle1Height: Number(values.height) });
+          this.setState({ tempPaddle1Height: Number(values.height) });
         } else if (key === "color") {
           this.setState({
-            paddle1Color: "#" + values.color.hex
+            tempPaddle1Color: "#" + values.color.hex
           });
         } else if (key === "velocityY") {
-          this.setState({ paddle1VelocityY: Number(values.velocityY) });
+          this.setState({ tempPaddle1VelocityY: Number(values.velocityY) });
         }
       }
     }
     if (typeof data.gameData.paddle2 === "object") {
       for (var key in data.gameData.paddle2) {
-        console.log(key);
         var values = data.gameData.paddle2;
         if (key === "width") {
-          this.setState({ paddle2Width: Number(values.width) });
+          this.setState({ tempPaddle2Width: Number(values.width) });
         } else if (key === "height") {
-          this.setState({ paddle2Height: Number(values.height) });
+          this.setState({ tempPaddle2Height: Number(values.height) });
         } else if (key === "color") {
           this.setState({
-            paddle2Color: "#" + values.color.hex
+            tempPaddle2Color: "#" + values.color.hex
           });
         } else if (key === "velocityY") {
-          this.setState({ paddle2VelocityY: Number(values.velocityY) });
+          this.setState({ tempPaddle2VelocityY: Number(values.velocityY) });
         }
       }
     }
@@ -153,7 +183,11 @@ class GameInterface extends Component {
             alignItems: "center"
           }}
         >
-          <GameCanvas settings={this.state} ref={this.child} />
+          <GameCanvas
+            settings={this.state}
+            ref={this.child}
+            outOfBounds={this.ballOutOfBounds}
+          />
           <form>
             <GameControls settings={this.state} onChange={this.handleChange} />
             <input type="submit" value="Start Game" onClick={this.onSubmit} />
